@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "FullList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vote List</h2>
+
+<table id="candidates" class="table table-bordered table-hover" width="500">
+    <thead>
+        <tr>
+            <th>Canidate</th>
+            <th>Vote</th>
+
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<table id="parties" class="table table-bordered table-hover" width="500">
+    <thead>
+        <tr>
+            <th>Party</th>
+            <th>Votes</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<br />
+<br />
+<br />
+@Html.ActionLink("Save Pdf", "ExportPdf", "Vote", new { actionName= ViewContext.RouteData.Values["action"]
+}, new { @class = "btn btn-primary" })
+
+
+@Html.ActionLink("ExportCSV", "ExportCSV", "Vote", null, new { @class = "btn btn-primary" })
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            var table = $("#candidates").DataTable({
+                searching: false,
+                paging: false,
+
+                ajax: {
+
+                    url: "/api/candidate/",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "CandidateName",
+
+
+                    },
+                    {
+                        data: "CandidateCount"
+                    }
+
+                ]
+            });
+
+        });
+
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            var table = $("#parties").DataTable({
+                searching: false,
+                paging: false,
+
+                ajax: {
+
+                    url: "/api/party/",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "PartyName",
+
+
+                    },
+                    {
+                        data: "PartyCount"
+                    }
+
+                ]
+            });
+
+        });
+
+    </script>
+
+}

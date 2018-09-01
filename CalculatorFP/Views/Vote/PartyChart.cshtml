@@ -1,0 +1,15 @@
+﻿@model List<CalculatorFP.ViewModels.PartyListViewModel>
+@{
+    ViewBag.Title = "PartyChart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PartyChart</h2>
+
+@{
+    var chart = new Chart(width: 800, height: 300)
+   .AddSeries("Default", chartType: "Bar",
+        xValue: Model, xField: "PartyName",
+        yValues: Model, yFields: "PartyCount")
+    .Write();
+}
