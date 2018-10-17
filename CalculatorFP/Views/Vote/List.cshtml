@@ -31,10 +31,7 @@
 <br />
 <br />
 <br />
-@Html.ActionLink("Save Pdf", "PrintIndex", "Vote", new { actionName= ViewContext.RouteData.Values["action"]
-}, new { @class = "btn btn-primary" })
-
-
+@Html.ActionLink("Save Pdf", "GeneratePdf", "Vote", null, new { @class = "btn btn-primary" })
 
 @Html.ActionLink("ExportCSV", "ExportCSV", "Vote", null, new { @class = "btn btn-primary" })
 

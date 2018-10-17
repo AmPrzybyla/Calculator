@@ -17,6 +17,10 @@ using System.Xml.Linq;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Borders;
 
 namespace CalculatorFP.Controllers
 {
@@ -146,12 +150,61 @@ namespace CalculatorFP.Controllers
             return RedirectToAction("List");
         }
 
-        [AllowAnonymous]
-        public ActionResult PrintIndex(string actionName)
+        [HttpGet]
+        public ActionResult GeneratePdf()
         {
+            MemoryStream stream = new MemoryStream();
+
+            PdfWriter writer = new PdfWriter(stream);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf);
+
+            var candidateLists = _context.Votes.GroupBy(v => v.Candidate.Name).Select(g => new
+            {
+                CandidateName = g.Key.ToString(),
+                CandidateCount = g.Count()
+            }).OrderByDescending(c => c.CandidateCount).ToList();
 
 
-            return new ActionAsPdf(actionName);
+            Table candidateTable = new Table(2, true);
+
+            candidateTable.AddCell("Candidate");
+            candidateTable.AddCell("Votes");
+
+
+            foreach (var candidate in candidateLists)
+            {
+                candidateTable.AddCell(new Paragraph(candidate.CandidateName));
+                candidateTable.AddCell(new Paragraph(candidate.CandidateCount.ToString()));
+            }
+
+            document.Add(candidateTable);
+
+
+            document.Add(new Paragraph("\n\n"));
+
+            var partyLists = _context.Votes.GroupBy(v => v.Candidate.PartyType.Name).Select(g => new
+            {
+                PartyName = g.Key.ToString(),
+                PartyCount = g.Count()
+            }).OrderByDescending(c => c.PartyCount).ToList();
+
+
+            candidateTable.AddCell("Party Name");
+            candidateTable.AddCell("Votes");
+            foreach (var party in partyLists)
+            {
+                candidateTable.AddCell(new Paragraph(party.PartyName));
+                candidateTable.AddCell(new Paragraph(party.PartyCount.ToString())).SetBorderBottom(new SolidBorder(4));
+
+            }
+            document.Add(candidateTable);
+
+
+
+            document.Close();
+
+            return File(stream.ToArray(), "application/pdf", "test.pdf");
         }
 
 
