@@ -6,10 +6,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CalculatorFP.ViewModels;
-using Rotativa;
 using System.Text;
 using System.Data;
-using Jitbit.Utils;
 using Microsoft.AspNet.Identity;
 using System.Net;
 using System.Xml;
@@ -204,15 +202,13 @@ namespace CalculatorFP.Controllers
 
             document.Close();
 
-            return File(stream.ToArray(), "application/pdf", "test.pdf");
+            return File(stream.ToArray(), "application/pdf", "Votes.pdf");
         }
 
 
-        public ActionResult ExportCSV()
+        public FileContentResult GenerateCSV()
         {
-
-
-            var candidateLists = _context.Votes.GroupBy(v => v.Candidate.Name).Select(g => new 
+            var candidateLists = _context.Votes.GroupBy(v => v.Candidate.Name).Select(g => new
             {
                 CandidateName = g.Key.ToString(),
                 CandidateCount = g.Count()
@@ -224,27 +220,34 @@ namespace CalculatorFP.Controllers
                 PartyCount = g.Count()
             }).OrderByDescending(c => c.PartyCount).ToList();
 
-            var myExport = new CsvExport();
 
-            foreach (var item in candidateLists)
-            {
-                myExport.AddRow();
-                myExport["Candidate"] = item.CandidateName;
-                myExport["Votes"] = item.CandidateCount;
-            }
-            myExport.AddRow();
-            myExport.AddRow();
-            foreach (var item in partyLists)
-            {
-                myExport.AddRow();
-                myExport["Candidate"] = item.PartyName;
-                myExport["Votes"] = item.PartyCount;
-            }
-        
+            var csv = new StringBuilder();
 
-            return File(myExport.ExportToBytes(), "text/csv", "results.csv");
-           
+            csv.Append("Candidate Name,Votes"+ Environment.NewLine);
+            foreach (var candidate in candidateLists)
+            {
+                var name = candidate.CandidateName;
+                var count = candidate.CandidateCount;
+                var newLine = string.Format("{0},{1}", name, count+ Environment.NewLine);
+                csv.Append(newLine);
+            }
+
+
+            csv.Append(Environment.NewLine+"Party Name,Votes" + Environment.NewLine);
+
+            foreach (var party in partyLists)
+            {
+                var name = party.PartyName;
+                var count = party.PartyCount;
+                var newLine = string.Format("{0},{1}", name, count + Environment.NewLine);
+                csv.Append(newLine);
+            }
+
+
+            return File(new System.Text.UTF8Encoding().GetBytes(csv.ToString()), "text/cs", "Votes.csv" );
         }
+
+
 
 
         public void ClearDisallowed()

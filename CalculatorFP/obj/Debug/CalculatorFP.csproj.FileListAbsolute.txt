@@ -228,7 +228,6 @@ C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\Microsoft.We
 C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\MvcCheckBoxList.dll
 C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\Newtonsoft.Json.dll
 C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\Owin.dll
-C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\Rotativa.dll
 C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\System.Diagnostics.DiagnosticSource.dll
 C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\System.Net.Http.Formatting.dll
 C:\Users\klaptop\source\repos\CalculatorFP - Kopia\CalculatorFP\bin\System.Web.Helpers.dll
